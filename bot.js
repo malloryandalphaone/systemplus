@@ -5,11 +5,18 @@ const as = require('array-sort');
 const config = require('./Configuration.json');
 const tpoints = {};
 const vpoints = {};
-hero.config = config;
-hero.login(hero.config.token);
-hero.on('ready',async () => {
-  console.log(`.Codes TOP.`);
-  hero.users.forEach(m => {
+client.config = client;
+client.login(process.env.TOKEN);
+
+client.on("ready", () => {
+client.user.setStatus('dnd');
+  console.log("Reeebel | Logged in! Server count: ${client.guilds.size}");
+  client.user.setActivity("System.",{type: 'LISTENING'});
+});
+
+client.on('ready',async () => {
+  console.log(`Vast.`);
+  client.users.forEach(m => {
     if(m.bot) return;
     if(!tpoints[m.id]) tpoints[m.id] = {points: 0, id: m.id};
  
@@ -17,7 +24,7 @@ hero.on('ready',async () => {
   });
 });
  
-hero.on('message',async message => {
+client.on('message',async message => {
   if(message.author.bot || message.channel.type === 'dm') return;
   let args = message.content.split(' ');
   let member = message.member;
@@ -27,7 +34,7 @@ hero.on('message',async message => {
  
   let rPoints = Math.floor(Math.random() * 4) + 1;// Random Points
   tpoints[author.id].points += rPoints;
-  if(args[0] === `${hero.config.prefix}top`) {
+  if(args[0] === `${client.config.prefix}top`) {
     let _voicePointer = 1;
     let _textPointer = 1;
     let _voiceArray = Object.values(vpoints);
@@ -47,7 +54,7 @@ hero.on('message',async message => {
   }
 });
  
-hero.on('voiceStateUpdate', (u, member) => {
+client.on('voiceStateUpdate', (u, member) => {
   let author = member.user.id;
   let guild = member.guild;
   if(member.voiceChannel === null) return;
