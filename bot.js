@@ -1,68 +1,70 @@
 const Discord = require('discord.js');
-const fs = require('fs');
-const hero = new Discord.Client({disableEveryone: true, maxMessagesCache: 1});
-const as = require('array-sort');
-const config = require('./Configuration.json');
-const tpoints = {};
-const vpoints = {};
-client.config = client;
-client.login(process.env.TOKEN);
+const client = new Discord.Client();
+var prefix = "!"
+const fs = require("fs"); 
+const moment = require("moment");  
+const ms = require("ms");
+const wait = require('util').promisify(setTimeout);
 
 client.on("ready", () => {
-client.user.setStatus('dnd');
+client.user.setStatus('online');
   console.log("Reeebel | Logged in! Server count: ${client.guilds.size}");
   client.user.setActivity("System.",{type: 'LISTENING'});
 });
 
-client.on('ready',async () => {
-  console.log(`Vast.`);
-  client.users.forEach(m => {
-    if(m.bot) return;
-    if(!tpoints[m.id]) tpoints[m.id] = {points: 0, id: m.id};
- 
-    if(!vpoints[m.id]) vpoints[m.id] = {points: 0, id: m.id};
-  });
-});
- 
-client.on('message',async message => {
-  if(message.author.bot || message.channel.type === 'dm') return;
-  let args = message.content.split(' ');
-  let member = message.member;
-  let mention = message.mentions.users.first();
-  let guild = message.guild;
-  let author = message.author;
- 
-  let rPoints = Math.floor(Math.random() * 4) + 1;// Random Points
-  tpoints[author.id].points += rPoints;
-  if(args[0] === `${client.config.prefix}top`) {
-    let _voicePointer = 1;
-    let _textPointer = 1;
-    let _voiceArray = Object.values(vpoints);
-    let _textArray = Object.values(tpoints);
-    let _topText = as(_textArray, 'points', { reverse: true });
-    let _topVoice = as(_voiceArray, 'points', { reverse: true });;
-    let topRoyale = new Discord.RichEmbed();
-    topRoyale.setAuthor(message.author.username, message.author.avatarURL);
-    topRoyale.setTitle('# " Top');
-    //topRoyale.setThumbnail(message.guild.iconURL);
-    topRoyale.addField(`**TOP 5 TEXT 💬**`, _topText.map(r => `**\`.${_textPointer++}\` | <@${r.id}> \`XP: ${r.points}\`**`).slice(0, 5), true);
-    topRoyale.addField(`**TOP 5 VOICE 🎙**`, _topVoice.map(r => `**\`.${_voicePointer++}\` | <@${r.id}> \`XP: ${r.points}\`**`).slice(0, 5), true);
-    topRoyale.setFooter(`Developed By: YouseeF.#9060`, message.guild.iconURL);
-    message.channel.send(topRoyale).catch(e => {
-      if(e) return message.channel.send(`**. Error; \`${e.message}\`**`);
-    });
-  }
-});
- 
-client.on('voiceStateUpdate', (u, member) => {
-  let author = member.user.id;
-  let guild = member.guild;
-  if(member.voiceChannel === null) return;
-  let rPoints = Math.floor(Math.random() * 4) + 1;// Random Points
-  setInterval(() => {
-    if(!member.voiceChannel) return;
-    if(member.selfDeafen) return;
-    vpoints[author].points += rPoints;
-  }, 5000); // 5 Secs
-});
 
+
+
+const devs = ["518113766915702789"]// ايدي الخاص بحسابك
+ 
+const adminprefix = "3!";//Narox
+client.on('message', message => {
+    var argresult = message.content.split(` `).slice(1).join(' ');
+      if (!devs.includes(message.author.id)) return;
+     
+  if (message.content.startsWith(adminprefix + 'pt')) {
+    client.user.setGame(argresult);
+      message.channel.sendMessage(`**:white_check_mark:   ${argresult}**`)
+  } else
+    if (message.content === (adminprefix + "Percie")) {
+    message.guild.leave();        
+  } else  
+  if (message.content.startsWith(adminprefix + 'wt')) {// لجعل البوت في حاله الواتشنق
+  client.user.setActivity(argresult, {type:'WATCHING'});
+      message.channel.sendMessage(`**:white_check_mark:   ${argresult}**`)
+  } else
+  if (message.content.startsWith(adminprefix + 'setprefix')) {//لتغير البريفكس
+  client.user.setPrefix(argresult).then
+      message.channel.send(`**Prefix Changed :white_check_mark: ${argresult}** `)
+  } else
+  if (message.content.startsWith(adminprefix + 'ls')) {// لجعل البوت في حاله الاستماع
+  client.user.setActivity(argresult , {type:'LISTENING'});
+      message.channel.sendMessage(`**:white_check_mark:   ${argresult}**`)
+  } else     //Narox
+    if (message.content.startsWith(adminprefix + 'setname')) {// لتغير اسم البوت
+  client.user.setUsername(argresult).then
+      message.channel.sendMessage(`**${argresult}** : Done `)
+  return message.reply("**Name Changed :white_check_mark:**");
+  } else
+    if (message.content.startsWith(adminprefix + 'setavatar')) {// لتغير صوره البوت
+  client.user.setAvatar(argresult);
+    message.channel.sendMessage(`**${argresult}** : تم تغير صورة البوت`);
+        } else    
+  if (message.content.startsWith(adminprefix + 'st')) {// لعمل ستريمنق للبوت
+    client.user.setGame(argresult, "https://www.twitch.tv/idk");
+      message.channel.sendMessage(`**:white_check_mark:   ${argresult}**`)
+  }
+    if(message.content === adminprefix + "restart") {// لعمل ريسترت للبوت
+      if (!devs.includes(message.author.id)) return;
+          message.channel.send(`:warning:️ **Bot restarting by ${message.author.username}**`);
+        console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        console.log(`⚠️ Bot restarting... ⚠️`);
+        console.log("===============================================\n\n");
+        client.destroy();
+        child_process.fork(__dirname + "/bot.js");
+        console.log(`Bot Successfully Restarted`);
+    }
+ 
+  });
+
+client.login(process.env.TOKEN);
