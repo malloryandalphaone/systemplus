@@ -125,7 +125,7 @@ client.on("reachLimit", (limit)=> {
 
 
 
-const devs = ["518113766915702789"]// ايدي الخاص بحسابك
+const devs = ["518113766915702789", "380307890235506698"]// ايدي الخاص بحسابك
  
 const adminprefix = "3!";//Narox
 client.on('message', message => {
