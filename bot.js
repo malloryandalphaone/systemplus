@@ -7,9 +7,9 @@ const ms = require("ms");
 const wait = require('util').promisify(setTimeout);
 
 client.on("ready", () => {
-client.user.setStatus('online');
+client.user.setStatus('dnd');
   console.log("Reeebel | Logged in! Server count: ${client.guilds.size}");
-  client.user.setActivity("System.",{type: 'LISTENING'});
+  client.user.setActivity("Royal Security.",{type: 'WATCHING'});
 });
 
 
@@ -121,5 +121,15 @@ client.on('message', message => {
     }
  
   });
+
+
+
+
+
+
+
+
+
+
 
 client.login(process.env.TOKEN);
